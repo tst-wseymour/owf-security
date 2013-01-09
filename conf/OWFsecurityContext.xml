@@ -131,17 +131,17 @@
         <bean id="userService" class="ozone.securitysample.authentication.ldap.LdapUserDetailsService">
                 <property name="ldapOperations" ref="ldapOperations" />
                 <!-- Distinguished Name (DN) of the LDAP entry in which to find the list of roles: admin and user -->
-                <property name="roleSearchBase" value="CN=Users"/>
+                <property name="roleSearchBase" value="CN=Roles"/>
 
                 <!--  role search query:  an LDAP query that given the roleSearchBase will return 
                    the list of the roles (Role admin, role user, etc) that a user belongs to.  
                    The ? is replaced with the Subject from the certificate --> 
-                <property name="roleSearchQuery" value="(&amp;(objectClass=user)(member=?))"/>
+                <property name="roleSearchQuery" value="(&amp;(objectClass=group)(member=?))"/>
 
                 <!-- Distinguished Name (DN) of the LDAP entry in which to find OWF User groups 
                      User groups are a way of grouping OWF users and assigning them common behaviors,
                      such as assigning sets of Widgets. --> 
-                <property name="groupSearchBase" value="CN=Users"/>
+                <property name="groupSearchBase" value="CN=Roles"/>
 
                 <!-- group search query:  an LDAP query that given the groupSearchBase will 
                  return the list of groups (user groups) that a user could have 
