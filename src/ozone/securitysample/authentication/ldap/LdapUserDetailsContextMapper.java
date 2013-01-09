@@ -38,8 +38,10 @@ public class LdapUserDetailsContextMapper
       Collection authorities = determineAuthorities(context.getDn().toString());
 
       Collection groups = determineOwfGroups(context.getDn().toString());
-
-      userDetails = new OWFUserDetailsImpl(context.getStringAttribute("cn"), context.getObjectAttribute("userpassword").toString(), authorities, groups);
+      String password = null;
+      if(context.getObjectAttribute("userpassword") != null)
+          password = context.getObjectAttribute("userpassword").toString();
+      userDetails = new OWFUserDetailsImpl(context.getStringAttribute("cn"), password, authorities, groups);
 
       log.debug("user details [" + userDetails.toString() + "].");
     }

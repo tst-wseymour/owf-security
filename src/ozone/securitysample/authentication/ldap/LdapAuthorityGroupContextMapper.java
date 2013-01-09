@@ -27,7 +27,8 @@ public class LdapAuthorityGroupContextMapper
       ldapAuthorityGroup.setBusinessCategory(context.getStringAttribute("businessCategory"));
       ldapAuthorityGroup.setOrganizationName(context.getStringAttribute("o"));
       ldapAuthorityGroup.setSamAccountName(context.getStringAttribute("sAMAccountName"));
-
+      ldapAuthorityGroup.setC(context.getStringAttribute("c"));
+      ldapAuthorityGroup.setOu(context.getStringAttribute("ou"));
       log.debug("ldap authority group [" + ldapAuthorityGroup.toString() + "].");
     }
 

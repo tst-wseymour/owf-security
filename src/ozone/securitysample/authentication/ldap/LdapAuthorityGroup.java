@@ -11,7 +11,9 @@ public class LdapAuthorityGroup
   String businessCategory;
   String organizationName;
   String sAMAccountName;
-
+  private String c;
+  private String ou;
+  
   public String getDn()
   {
     return this.dn;
@@ -72,5 +74,33 @@ public class LdapAuthorityGroup
   public void setSamAccountName(String sAMAccountName) {
     this.sAMAccountName = sAMAccountName;
   }
+
+    /**
+     * @return the c
+     */
+    public String getC() {
+        return c;
+    }
+
+    /**
+     * @param c the c to set
+     */
+    public void setC(String c) {
+        this.c = c;
+    }
+
+    /**
+     * @return the ou
+     */
+    public String getOu() {
+        return ou;
+    }
+
+    /**
+     * @param ou the ou to set
+     */
+    public void setOu(String ou) {
+        this.ou = ou;
+    }
 
 }
