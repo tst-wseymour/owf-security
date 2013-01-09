@@ -38,16 +38,23 @@ public class LdapUserDetailsService
     try
     {
       ///  
-        AndFilter andFilter = new AndFilter();
-        andFilter.and(new EqualsFilter("objectClass","user"));
-        andFilter.and(new EqualsFilter("sAMAccountName",certificateUserInfo));
-        System.out.println("LDAP Query " + andFilter.encode());
+        AndFilter andFilterRole = new AndFilter();
+        andFilterRole.and(new EqualsFilter("objectClass","user"));
+        andFilterRole.and(new EqualsFilter("sAMAccountName",certificateUserInfo));
+        
+        AndFilter andFilterGroup = new AndFilter();
+        andFilterGroup.and(new EqualsFilter("objectClass","group"));
+        
+        System.out.println("LDAP Query " + andFilterRole.encode());
         List userRoles = null;
         List userGroups = null;
         try {
-            userRoles = ldapOperations.search("", andFilter.encode(),new LdapAuthorityGroupContextMapper());
+            userRoles = ldapOperations.search("", andFilterRole.encode(),new LdapAuthorityGroupContextMapper());
             log.debug("search returned [" + (userRoles != null ? userRoles.size() : 0) + "] role(s)");
-            userGroups = ldapOperations.search("", andFilter.encode(),new LdapAuthorityGroupContextMapper());
+            LdapAuthorityGroup lag = (LdapAuthorityGroup)userRoles.get(0);
+            String dn = lag.getDn()+",DC=dev,DC=wisrd,DC=org";
+            andFilterGroup.and(new EqualsFilter("member",dn));
+            userGroups = ldapOperations.search("", andFilterGroup.encode(),new LdapAuthorityGroupContextMapper());
             log.debug("search returned [" + (userGroups != null ? userGroups.size() : 0) + "] group(s)");
         } catch(PartialResultException pre) {
             //Not sure why this is thrown when we locate the data.
@@ -60,6 +67,7 @@ public class LdapUserDetailsService
       log.debug("search returned [" + (userGroups != null ? userGroups.size() : 0) + "] group(s)");*/
       if(userRoles.size() > 0 || userGroups.size() > 0) {
           LdapAuthorityGroup lag = (LdapAuthorityGroup)userRoles.get(0);
+          //String dn = lag.getDn()+",DC=dev,DC=wisrd,DC=org";
           String dn = lag.getDn();
       //userDetails = (UserDetails)this.ldapOperations.lookup(certificateUserInfo, new LdapUserDetailsContextMapper(userRoles, userGroups));
           userDetails = (UserDetails)this.ldapOperations.lookup(dn, new LdapUserDetailsContextMapper(userRoles, userGroups));
