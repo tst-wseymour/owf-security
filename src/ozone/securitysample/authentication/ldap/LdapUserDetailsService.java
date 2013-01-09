@@ -38,9 +38,13 @@ public class LdapUserDetailsService
     try
     {
       ///  
+        AndFilter andFilterDN = new AndFilter();
+        andFilterDN.and(new EqualsFilter("objectClass","user"));
+        andFilterDN.and(new EqualsFilter("sAMAccountName",certificateUserInfo));
+        
         AndFilter andFilterRole = new AndFilter();
-        andFilterRole.and(new EqualsFilter("objectClass","user"));
-        andFilterRole.and(new EqualsFilter("sAMAccountName",certificateUserInfo));
+        andFilterRole.and(new EqualsFilter("objectClass","group"));
+        //andFilterRole.and(new EqualsFilter("sAMAccountName",certificateUserInfo));
         
         AndFilter andFilterGroup = new AndFilter();
         andFilterGroup.and(new EqualsFilter("objectClass","group"));
@@ -49,11 +53,17 @@ public class LdapUserDetailsService
         List userRoles = null;
         List userGroups = null;
         try {
-            userRoles = ldapOperations.search("", andFilterRole.encode(),new LdapAuthorityGroupContextMapper());
+            userRoles = ldapOperations.search("", andFilterDN.encode(),new LdapAuthorityGroupContextMapper());
             log.debug("search returned [" + (userRoles != null ? userRoles.size() : 0) + "] role(s)");
             LdapAuthorityGroup lag = (LdapAuthorityGroup)userRoles.get(0);
             String dn = lag.getDn()+",DC=dev,DC=wisrd,DC=org";
-            andFilterGroup.and(new EqualsFilter("member",dn));
+            andFilterRole.and(new EqualsFilter("member",dn));
+            userRoles.clear();
+            userRoles = ldapOperations.search("", andFilterRole.encode(),new LdapAuthorityGroupContextMapper());
+            
+            LdapAuthorityGroup lag2 = (LdapAuthorityGroup)userRoles.get(0);
+            String dn2 = lag.getDn()+",DC=dev,DC=wisrd,DC=org";
+            andFilterGroup.and(new EqualsFilter("member",dn2));
             userGroups = ldapOperations.search("", andFilterGroup.encode(),new LdapAuthorityGroupContextMapper());
             log.debug("search returned [" + (userGroups != null ? userGroups.size() : 0) + "] group(s)");
         } catch(PartialResultException pre) {
