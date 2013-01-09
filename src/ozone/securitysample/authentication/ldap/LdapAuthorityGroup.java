@@ -4,6 +4,7 @@ import org.apache.commons.lang.builder.ReflectionToStringBuilder;
 
 public class LdapAuthorityGroup
 {
+  private String dnBase;
   String dn;
   String cn;
   String[] members = new String[0];
@@ -101,6 +102,20 @@ public class LdapAuthorityGroup
      */
     public void setOu(String ou) {
         this.ou = ou;
+    }
+
+    /**
+     * @return the dnBase
+     */
+    public String getDnBase() {
+        return dnBase;
+    }
+
+    /**
+     * @param dnBase the dnBase to set
+     */
+    public void setDnBase(String dnBase) {
+        this.dnBase = dnBase;
     }
 
 }

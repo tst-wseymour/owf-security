@@ -52,18 +52,21 @@ public class LdapUserDetailsService
         System.out.println("LDAP Query " + andFilterRole.encode());
         List userRoles = null;
         List userGroups = null;
+        String dn = null;
         try {
             userRoles = ldapOperations.search("", andFilterDN.encode(),new LdapAuthorityGroupContextMapper());
             log.debug("search returned [" + (userRoles != null ? userRoles.size() : 0) + "] role(s)");
             LdapAuthorityGroup lag = (LdapAuthorityGroup)userRoles.get(0);
-            String dn = lag.getDn()+",DC=dev,DC=wisrd,DC=org";
-            andFilterRole.and(new EqualsFilter("member",dn));
+            dn = lag.getDn();
+            //String dn1 = lag.getDn()+",DC=dev,DC=wisrd,DC=org";
+            String dn1 = lag.getDn() + lag.getDnBase();
+            andFilterRole.and(new EqualsFilter("member",dn1));
             userRoles.clear();
             userRoles = ldapOperations.search("", andFilterRole.encode(),new LdapAuthorityGroupContextMapper());
             
             LdapAuthorityGroup lag2 = (LdapAuthorityGroup)userRoles.get(0);
-            String dn2 = lag.getDn()+",DC=dev,DC=wisrd,DC=org";
-            andFilterGroup.and(new EqualsFilter("member",dn2));
+            //String dn2 = lag.getDn()+",DC=dev,DC=wisrd,DC=org";
+            andFilterGroup.and(new EqualsFilter("member",dn1));
             userGroups = ldapOperations.search("", andFilterGroup.encode(),new LdapAuthorityGroupContextMapper());
             log.debug("search returned [" + (userGroups != null ? userGroups.size() : 0) + "] group(s)");
         } catch(PartialResultException pre) {
@@ -78,7 +81,7 @@ public class LdapUserDetailsService
       if(userRoles.size() > 0 || userGroups.size() > 0) {
           LdapAuthorityGroup lag = (LdapAuthorityGroup)userRoles.get(0);
           //String dn = lag.getDn()+",DC=dev,DC=wisrd,DC=org";
-          String dn = lag.getDn();
+          //String dn = lag.getDn();
       //userDetails = (UserDetails)this.ldapOperations.lookup(certificateUserInfo, new LdapUserDetailsContextMapper(userRoles, userGroups));
           userDetails = (UserDetails)this.ldapOperations.lookup(dn, new LdapUserDetailsContextMapper(userRoles, userGroups));
       }
