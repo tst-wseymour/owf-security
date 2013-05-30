@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-3.0.xsd">
+
+    <bean id="OzoneConfiguration" class="ozone.owf.Configuration">
+        <property name="prefsLocation" value="https://${ozone.host}:${ozone.port}/owf/prefs"/>
+
+        <property name="officeName" value="" />
+        <property name="marketplaceLocation" value="" />
+        <property name="mpVersion" value="2.3" />
+        <property name="mpInitialPollingInterval" value="5000" />
+        <property name="mpPollingInterval" value="300000" />
+        <property name="log4jWatchTime" value="180000" />
+        <property name="showAccessAlert" value="true" />
+        <property name="accessAlertMsg" value="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla interdum eleifend sapien dignissim malesuada. Sed imperdiet augue vitae justo feugiat eget porta est blandit. Proin ipsum ipsum, rutrum ac gravida in, ullamcorper a augue. Sed at scelerisque augue. Morbi scelerisque gravida sapien ut feugiat. Donec dictum, nisl commodo dapibus pellentesque, enim quam consectetur quam, at dictum dui augue at risus. Ut id nunc in justo molestie semper. Curabitur magna velit, varius eu porttitor et, tempor pulvinar nulla. Nam at tellus nec felis tincidunt fringilla. Nunc nisi sem, egestas ut consequat eget, luctus et nisi. Nulla et lorem odio, vitae pretium ipsum. Integer tellus libero, molestie a feugiat a, imperdiet sit amet metus. Aenean auctor fringilla eros, sit amet suscipit felis eleifend a." />
+
+        <property name="enablePendingApprovalWidgetTagGroup" value="true" />
+        <property name="pendingApprovalTagGroupName" value="pending approval" />
+
+        <property name="bannerIcon" value="themes/common/images/blue/header/wfLogo48.gif" />
+        <property name="bannerIconHeight" value="48" />     <!-- DO NOT CHANGE! -->
+        <property name="bannerIconWidth" value="250" />		<!-- DO NOT CHANGE! -->
+        
+        <property name="adminBannerIcon" value="images/adminLogo52.png" />
+        <property name="adminBannerIconHeight" value="52" />	
+        <property name="adminBannerIconWidth" value="346" />
+        <property name="adminBannerPageTitle" value="" />
+        
+        <!-- required to handle images to themes properly -->
+        <property name="defaultTheme" value="a_default" />
+
+        <!--sets the autoSave interval for saving dashboards in milliseconds 900000 is 15 minutes-->
+        <property name="autoSaveInterval" value="900000" />
+
+        <!-- Specifies a freeTextEntryMessage to appear on all dialogs which allow text entry
+             To turn off the warning message, use the following:
+                 <property name="freeTextEntryWarningMessage" value="" />
+        -->
+        <property name="freeTextEntryWarningMessage" value="Warning, Data entered must not be above System High" />
+
+        <!-- example usage to specify a logoutURL, this will also place a logout link on the ui -->
+        <property name="logoutURL" value="/logout" /> 
+
+        <!-- controls whether widget log times are logged the server -->
+        <property name="sendWidgetLoadTimesToServer" value="true" />
+        <!-- controls whether widget log times are sent as eventing messages to the Widget Log widget-->
+        <property name="publishWidgetLoadTimes" value="true" />
+
+
+        <!-- ========================================================================== -->
+        <!-- START Banner configuration -->
+
+        <!-- Format to display date in; see http://dev.sencha.com/deploy/ext-4.0.2a/docs/#/api/Ext.Date for syntax
+             Default is: F j, Y, g:i A
+                    e.g.  August 1, 2011, 1:01 PM
+
+            Alt. Sample: n/j/Y G:i 
+                    e.g.  8/1/2011 13:01 
+
+        <property name="lastLoginDateFormat" value="n/j/Y G:i" />
+        -->
+
+        <!-- END Banner configuration -->
+        <!-- ========================================================================== -->
+
+        <property name="enableMetrics" value="true" />
+
+        <!--
+          Specifies a regular expression for which files will show up in the help window.  The default is to show
+          files with .html .gsp .jsp .pdf .doc .docx .mov .mp4 .swf .wmv extensions
+        -->
+        <property name="helpFileRegex" value="^.*\.(html|gsp|jsp|pdf|doc|docx|mov|mp4|swf|wmv)$" />
+
+    </bean>
+    
+    <bean id="JBlocksFilter" class="ozone.owf.filter.DefaultJBlocksFilter">
+        <property name="configMessage" value="UNCLASSIFIED//FOUO"></property>
+    </bean>
+</beans>
